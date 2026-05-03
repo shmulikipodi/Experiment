@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
+import { getEnv } from '@/lib/env';
 
 export async function GET() {
-  const adminCode = process.env.ADMIN_CODE ?? '';
+  const adminCode = getEnv('ADMIN_CODE');
   return NextResponse.json({
     adminCodeSet: adminCode.length > 0,
     adminCodeLength: adminCode.length,

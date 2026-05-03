@@ -3,6 +3,7 @@ import { getIronSession } from 'iron-session';
 import { timingSafeEqual } from 'crypto';
 import { getDb } from '@/db/client';
 import { SessionData, sessionOptions } from '@/lib/session';
+import { getEnv } from '@/lib/env';
 
 type Participant = {
   code: string;
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
   const response = NextResponse.json({ status: 'ok' });
 
   // Check admin code first
-  const adminCode = process.env.ADMIN_CODE ?? '';
+  const adminCode = getEnv('ADMIN_CODE');
   if (adminCode && safeEqual(trimmed, adminCode)) {
     const session = await getIronSession<SessionData>(request, response, sessionOptions);
     session.isAdmin = true;
