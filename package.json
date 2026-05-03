@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p ${PORT:-3000}"
   },
   "license": "ISC",
   "dependencies": {
@@ -23,7 +23,6 @@
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.5.0",
     "postcss": "^8.5.13",
-    "puppeteer": "^24.42.0",
     "tailwindcss": "^3.4.19",
     "typescript": "^6.0.3"
   }
