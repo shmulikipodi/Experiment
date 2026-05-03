@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getIronSession } from 'iron-session';
 import { timingSafeEqual } from 'crypto';
-import db from '@/db/client';
+import { getDb } from '@/db/client';
 import { SessionData, sessionOptions } from '@/lib/session';
 
 type Participant = {
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Look up participant
-  const row = db
+  const row = getDb()
     .prepare('SELECT code, result, feedback FROM participants WHERE code = ?')
     .get(trimmed) as Participant | undefined;
 

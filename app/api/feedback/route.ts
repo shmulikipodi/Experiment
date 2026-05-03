@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import db from '@/db/client';
+import { getDb } from '@/db/client';
 
 type Participant = { result: string | null; feedback: number | null };
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'invalid_input' }, { status: 400 });
   }
 
-  const result = db
+  const result = getDb()
     .prepare(
       `UPDATE participants
        SET feedback = ?, feedback_at = datetime('now')
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Distinguish why the update matched 0 rows
-  const row = db
+  const row = getDb()
     .prepare('SELECT result, feedback FROM participants WHERE code = ?')
     .get(code.trim()) as Participant | undefined;
 

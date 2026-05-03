@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { getIronSession } from 'iron-session';
-import db from '@/db/client';
+import { getDb } from '@/db/client';
 import { SessionData, sessionOptions } from '@/lib/session';
 import CreateCodeForm from './CreateCodeForm';
 import AssignResultForm from './AssignResultForm';
@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
   if (!session.isAdmin) redirect('/');
 
-  const participants = db
+  const participants = getDb()
     .prepare(
       `SELECT id, code,
               CASE WHEN result IS NOT NULL THEN substr(result, 1, 80) ELSE NULL END AS result,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import db from '@/db/client';
+import { getDb } from '@/db/client';
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'invalid_input' }, { status: 400 });
   }
 
-  const updated = db
+  const updated = getDb()
     .prepare(
       `UPDATE participants
        SET result = ?, assigned_at = datetime('now')

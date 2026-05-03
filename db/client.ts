@@ -17,7 +17,11 @@ function createDb(): Database.Database {
   return db;
 }
 
-const db: Database.Database = globalThis.__db ?? createDb();
-if (process.env.NODE_ENV !== 'production') globalThis.__db = db;
-
-export default db;
+// Lazy getter — never opens the DB at import time, only on first actual call.
+// This prevents SQLITE_BUSY during next build when multiple workers import this module.
+export function getDb(): Database.Database {
+  if (!globalThis.__db) {
+    globalThis.__db = createDb();
+  }
+  return globalThis.__db;
+}

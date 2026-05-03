@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import db from '@/db/client';
+import { getDb } from '@/db/client';
 
 type ParticipantRow = {
   id: number;
@@ -12,7 +12,7 @@ type ParticipantRow = {
 };
 
 export async function GET() {
-  const rows = db
+  const rows = getDb()
     .prepare(
       `SELECT id, code,
               CASE WHEN result IS NOT NULL THEN substr(result, 1, 80) ELSE NULL END AS result,
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const row = db
+    const row = getDb()
       .prepare(`INSERT INTO participants (code) VALUES (?) RETURNING id, code, created_at`)
       .get(trimmed) as { id: number; code: string; created_at: string };
     return NextResponse.json(row, { status: 201 });

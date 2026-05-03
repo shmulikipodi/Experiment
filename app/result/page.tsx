@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import db from '@/db/client';
+import { getDb } from '@/db/client';
 import FeedbackSlider from './FeedbackSlider';
 
 type Participant = {
@@ -17,7 +17,7 @@ export default function ResultPage({ searchParams }: Props) {
 
   if (!rawCode) redirect('/');
 
-  const row = db
+  const row = getDb()
     .prepare('SELECT code, result, feedback FROM participants WHERE code = ?')
     .get(rawCode) as Participant | undefined;
 
